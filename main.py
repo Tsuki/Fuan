@@ -17,7 +17,6 @@ def coro(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         return client.loop.run_until_complete((f(*args, **kwargs)))
-
     return wrapper
 
 
@@ -45,6 +44,7 @@ async def ls(user: bool = False):
                 print(entity.id, entity.title, ",", msg.total)
             if dialog.is_user:
                 print(entity.id, entity.first_name, entity.last_name, ",", msg.total)
+    await client.disconnect()
     pass
 
 
@@ -65,7 +65,7 @@ async def delete(entity_ids: List[int]):
         except ValueError:
             print('Error as expected')
             continue
-
+    await client.disconnect()
     pass
 
 
