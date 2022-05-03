@@ -2,6 +2,7 @@ import os
 import sys
 from typing import List
 
+import telethon
 import typer
 
 from functools import wraps
@@ -62,6 +63,9 @@ async def delete(entity_ids: List[int]):
                 print("deleted", entity.id, entity.title, ",", msgs.total)
             if isinstance(entity, types.User):
                 print("deleted", entity.id, entity.first_name, entity.last_name, ",", msgs.total)
+        except telethon.errors.rpcerrorlist.ChannelPrivateError:
+            print(f'{entity_id} has leaved or kicked',)
+            continue
         except ValueError:
             print('Error as expected')
             continue
