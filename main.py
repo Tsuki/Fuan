@@ -1,5 +1,6 @@
 import os
 import sys
+from datetime import datetime, timedelta
 from typing import List
 
 import telethon
@@ -53,10 +54,11 @@ async def ls(user: bool = False):
 @coro
 async def delete(entity_ids: List[int]):
     me = await client.get_me()
+    yesterday = datetime.now() - timedelta(hours = 1)
     for entity_id in entity_ids:
         try:
             entity = await client.get_entity(entity_id)
-            msgs = await client.get_messages(limit=None, entity=entity, from_user=me)
+            msgs = await client.get_messages(limit=None, entity=entity, from_user=me, offset_date=yesterday)
             await client.delete_messages(entity=entity, message_ids=msgs)
             if (isinstance(entity, (types.Chat, types.ChatForbidden)) or
                     (isinstance(entity, types.Channel) and entity.megagroup)):
